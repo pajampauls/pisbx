@@ -16,6 +16,7 @@ done
 
 # shellcheck disable=SC2086  # EXTRA_ARGS is intentionally word-split
 exec docker run --rm -it \
+  -e LOCAL_UID="$(id -u)" -e LOCAL_GID="$(id -g)" \
   --mount type=volume,src="${PISBX_VOLUME}",dst=/root/.pi \
   -v "$PWD:/workspace" \
   -v "${PI_AGENT_HOME}/auth.json:/root/.pi/agent/auth.json:ro" \
