@@ -88,6 +88,18 @@ Agent state is isolated per project by default. To share it across projects inst
 PISBX_VOLUME=pisbx pisbx
 ```
 
+### Custom models
+
+If `~/.config/pisbx/models.json` exists, it is mounted read-only as the agent's `models.json`, so custom providers and models are available in the sandbox.
+
+Store the key in `auth.json`, under the provider's name:
+
+```json
+{
+  "my-provider": { "type": "api_key", "key": "sk-..." }
+}
+```
+
 ## Deploying to a remote host
 
 From a local checkout, set up pisbx on a server you can reach over SSH:
@@ -96,7 +108,7 @@ From a local checkout, set up pisbx on a server you can reach over SSH:
 ./deploy.sh myserver      # or: make deploy HOST=myserver
 ```
 
-This copies `~/.pi/agent/auth.json` and `settings.json` to `~/.config/pisbx/` to host, copies the checkout to `~/pisbx` there and runs `install.sh`. Re-running it is safe. Override the files with `PISBX_AUTH` / `PISBX_SETTINGS` and the target directory with `PISBX_DEST`. Requires `rsync` locally and on the host.
+This copies `~/.pi/agent/auth.json`, `settings.json` and, if present, `models.json` to `~/.config/pisbx/` on the host (symlinks are resolved), copies the checkout to `~/pisbx` there and runs `install.sh`. Re-running it is safe. Override the files with `PISBX_AUTH` / `PISBX_SETTINGS` / `PISBX_MODELS` and the target directory with `PISBX_DEST`. API keys for custom providers are deployed with `auth.json` (see [Custom models](#custom-models)); environment variables are not copied. Requires `rsync` locally and on the host.
 
 One-time prerequisites on the host: Docker installed, your user in the `docker` group (`sudo usermod -aG docker $USER`), and a fresh login after the first install so the new group and `~/.local/bin` on `PATH` take effect.
 
