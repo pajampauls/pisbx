@@ -88,6 +88,18 @@ Agent state is isolated per project by default. To share it across projects inst
 PISBX_VOLUME=pisbx pisbx
 ```
 
+## Deploying to a remote host
+
+From a local checkout, set up pisbx on a server you can reach over SSH:
+
+```sh
+./deploy.sh myserver      # or: make deploy HOST=myserver
+```
+
+This copies `~/.pi/agent/auth.json` and `settings.json` to `~/.config/pisbx/` to host, copies the checkout to `~/pisbx` there and runs `install.sh`. Re-running it is safe. Override the files with `PISBX_AUTH` / `PISBX_SETTINGS` and the target directory with `PISBX_DEST`. Requires `rsync` locally and on the host.
+
+One-time prerequisites on the host: Docker installed, your user in the `docker` group (`sudo usermod -aG docker $USER`), and a fresh login after the first install so the new group and `~/.local/bin` on `PATH` take effect.
+
 ## Updating
 
 - **Launcher**: re-run the install command; re-installing over an existing install is safe.
